@@ -1,1 +1,98 @@
+CREATE TABLE rol(
+idRol INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nombreRol VARCHAR (20) NOT NULL,
+descripcion VARCHAR (200) NOT NULL
+);
+
+CREATE TABLE Membresia(
+idMembresia INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+status INT NOT NULL,
+precio DOUBLE NOT NULL
+);
+
+CREATE TABLE Usuario(
+idUsuario INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nombre VARCHAR (50) NOT NULL,
+contrasenia VARCHAR (50) NOT NULL,
+correo VARCHAR (100) NOT NULL,
+rol INT NOT NULL,
+membresia INT NOT NULL,
+FOREIGN KEY (rol) REFERENCES Rol (idRol),
+FOREIGN KEY (membresia) REFERENCES Membresia (idMembresia)
+);
+
+CREATE TABLE Categoria(
+idCategoria INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nombreCategoria VARCHAR (30) NOT NULL,
+descripcion VARCHAR (200)
+);
+DROP TABLE Caategoria
+
+CREATE TABLE Genero(
+idGenero INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nombreGenero VARCHAR (30) NOT NULL
+);
+
+CREATE TABLE Libro(
+isbn VARCHAR (50) PRIMARY KEY NOT NULL,
+titulo VARCHAR (100) NOT NULL,
+tipo VARCHAR (20) NOT NULL,
+autor VARCHAR (100) NOT NULL,
+status INT NOT NULL,
+genero INT NOT NULL,
+categoria INT NOT NULL,
+FOREIGN KEY (genero) REFERENCES Genero (idGenero),
+FOREIGN KEY (categoria) REFERENCES Categoria (idCategoria)
+);
+
+CREATE TABLE Reservas(
+idReservas INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+fechaReserva DATE NOT NULL,
+statusReserva INT NOT NULL,
+isbn VARCHAR (50) NOT NULL,
+FOREIGN KEY (isbn) REFERENCES Libro (isbn)
+);
+
+CREATE TABLE Prestamo(
+idPrestamo INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+isbn VARCHAR (50) NOT NULL,
+fechaPrestamo DATE NOT NULL,
+fechaEntrega DATE NOT NULL,
+descripcion VARCHAR (250),
+FOREIGN KEY (ISBN) REFERENCES Libro (isbn)
+);
+
+CREATE TABLE DetallePrestamo(
+idDetalleP INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+descripcion VARCHAR (250),
+prestamo INT NOT NULL,
+FOREIGN KEY (prestamo) REFERENCES Prestamo (idPrestamo)
+);
+
+CREATE TABLE Multa(
+idMulta INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+tipo VARCHAR (50) NOT NULL,
+descripcion VARCHAR (255) NOT NULL,
+costo DOUBLE NOT NULL
+);
+
+CREATE TABLE Devolucion(
+idDevolucion INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+isbn VARCHAR (50) NOT NULL,
+prestamo INT NOT NULL,
+fechaRealEntrega DATE NOT NULL,
+multa INT NOT NULL,
+FOREIGN KEY (isbn) REFERENCES Libro (isbn),
+FOREIGN KEY (prestamo) REFERENCES Prestamo (idPrestamo),
+FOREIGN KEY (multa) REFERENCES Multa (idMulta)
+);
+
+
+CREATE TABLE DetalleDevolucion(
+idDetalleD INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+descripcion VARCHAR (255) NOT NULL,
+total DOUBLE NOT NULL,
+devolucion INT NOT NULL,
+FOREIGN KEY (devolucion) REFERENCES Devolucion (idDevolucion)
+);
 
